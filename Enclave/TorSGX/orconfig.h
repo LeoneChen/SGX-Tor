@@ -2191,6 +2191,7 @@ sgx_file *sgx_get_file(const char *pathname);
 //int sgx_GetVersionEx(OSVERSIONINFOA* info);
 int * _errno(void);
 int sscanf(const char *str, const char *format, ...);
+int __isoc99_sscanf(const char *str, const char *format, ...);
 //int sgx_GlobalMemoryStatusEx(MEMORYSTATUSEX *mse);
 //void sgx_GetSystemInfo(SYSTEM_INFO *info);
 //void sgx_Sleep(unsigned long ms);

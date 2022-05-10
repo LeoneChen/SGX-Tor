@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-
+#include <algorithm>
 # include <unistd.h>
 # include <pwd.h>
 # define MAX_PATH FILENAME_MAX
@@ -465,7 +465,7 @@ char *load_torrc(char *path)
                 stastr = strchr(stastr, ' ') + 1;
                 endstr = strchr(stastr, '\n');
                 memset(port, 0, sizeof(port));
-                strncpy(port, stastr, endstr - stastr);
+                strncpy(port, stastr, std::min(sizeof(port) - 1, (size_t)(endstr - stastr)));
                 stastr = strstr(torrc, "Address ");
                 if (stastr == NULL) {
                         printf("torrc has no Address [ip] field!");
@@ -474,7 +474,7 @@ char *load_torrc(char *path)
                 stastr = strchr(stastr, ' ') + 1;
                 endstr = strchr(stastr, '\n');
                 memset(ip, 0, sizeof(ip));
-                strncpy(ip, stastr, endstr - stastr);
+                strncpy(ip, stastr, std::min(sizeof(ip) - 1, (size_t)(endstr - stastr)));
 
                 ip_len = strlen(ip);
                 port_len = strlen(port);

@@ -71,3 +71,4 @@ Enclave/TorSGX/*.o
 service_provider/*.o
 *.so
 app
+.vscode

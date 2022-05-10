@@ -16,7 +16,7 @@ enclave {
 			[in, size=64]MEMORYSTATUSEX *app_mse,
 			[in, size=64]SYSTEM_INFO *app_info);
 */
-		public void StartTorSGX(int argc, [in, size=argv_len]char** argv, int argv_len, 
+		public void StartTorSGX(int argc, [in, count=argc]char** argv, int argv_len, 
 			unsigned long long app_errno, unsigned long long app_environ,
 			[in, string] const char *app_torrc); 
 
@@ -121,7 +121,7 @@ enclave {
 								[in, size=0]void *provider, unsigned long provtype, unsigned long dwflags);
 */
 		int ocall_sgx_getenv([in,size=envlen]const char *env, int envlen, [out,size=ret_len]char *ret_str,int ret_len);
-		int ocall_sgx_getaddrinfo([in, string]const char *node, [in, string]const char *service, [in,out, size=hints_len]const void *hints, int hints_len, [out, size=res_len]void **res, int res_len); 
+		int ocall_sgx_getaddrinfo([in, string]const char *node, [in, string]const char *service, [in, size=hints_len]const void *hints, int hints_len, [out, size=res_len]void **res, int res_len); 
 		void ocall_sgx_freeaddrinfo([in,out, size=res_len]void *res, int res_len);
 		int ocall_sgx_getsockname(int s, [out, size=nlen]struct sockaddr *name, int nlen, [in, size=4]int *namelen);
 		int ocall_sgx_getsockopt(int s, int level, int optname, [out, size=optval_len]char *optval, int optval_len, [in,out, size=4]int* optlen);

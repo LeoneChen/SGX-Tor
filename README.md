@@ -29,7 +29,7 @@ $ cd (rootdir)/Enclave/TrustedLibrary/zlib-1.2.8
 $ make
 ~~~~~
 
-###Build SGX-Tor and Run in an enclave
+### Build SGX-Tor and Run in an enclave
 ~~~~~{.sh}
 $ cd (rootdir)/
 $ make SGX_MODE=HW SGX_DEBUG=1
@@ -38,9 +38,11 @@ $ ./app
 
 ## Windows environment
 
-###Compile OpenSSL Libraries 
-Install ActivePerl<br />
-Use 'VS2013 x64 Native Tools Command Prompt'<br />
+### Compile OpenSSL Libraries 
+Install ActivePerl
+
+Use 'VS2013 x64 Native Tools Command Prompt'
+
 - Application and SGX OpenSSL library should be built respectively
 ~~~~~{.sh}
 $ cd (rootdir)/SGX-Tor_WIN/OpenSSL_APP
@@ -57,7 +59,7 @@ bntest.obj : error LNK2019: messages are OK
 ~~~~~{.sh}
 $ ina_clean.bat
 ~~~~~
-###Build LibEvent Libraries
+### Build LibEvent Libraries
 - Application and SGX LibEvent library should be built respectively
 ~~~~~{.sh}
 $ cd (rootdir)/SGX-Tor_WIN/LibEvent_APP
@@ -69,7 +71,7 @@ $ cd (rootdir)/SGX-Tor_WIN/LibEvent_SGX
 $ nmake -f Makefile.nmake
 ~~~~~
 
-###Build ZLib Library
+### Build ZLib Library
 
 ~~~~~{.sh}
 $ open folder (rootdir)/SGX-Tor_WIN/zlib-1.2.8/contrib/vstudio/vc11
@@ -79,7 +81,8 @@ $ change Platform to x64.
 $ visual studio build
 ~~~~~
 
-###Run SGX-Tor<br />
+### Run SGX-Tor
+
 SGX-Tor will be executed as a client. You can check it by using firefox browser
 ~~~~~{.sh}
 $ change configuration to Prerelease mdoe
@@ -93,11 +96,13 @@ $ run
 ~~~~~
 - Warning: use sdk version 1.6 in this repository. SGX-Tor does not work on sdk version 1.7.
 
-###For setting private network
-####Setting torrc
+### For setting private network
+#### Setting torrc
 
-these settings are needed only once<br />
-- setting three authorities<br />
+these settings are needed only once
+
+- setting three authorities
+
 ~~~~~{.sh}
 $open TorOriginial2012 directory 
 $double click ina_fingerprint.bat
@@ -115,23 +120,29 @@ $ change DirAuthority lines in C001/torrc to authorities information
 $ set project arguments
 ~~~~~
 ![Alt text](https://github.com/kaist-ina/SGX-Tor/blob/master/Fig/torrc_setting.png)
-- arguments setting<br />
-<br />
+- arguments setting
+
 ![Alt text](https://github.com/kaist-ina/SGX-Tor/blob/master/Fig/setting_arguments.png)
 
 
 ## Contact
 
-Seongmin Kim <dallas1004@gmail.com><br />
-Juhyeng Han <sparkly9399@gmail.com><br />
+Seongmin Kim <dallas1004@gmail.com>
+
+Juhyeng Han <sparkly9399@gmail.com>
+
 Jaehyeong Ha <thundershower@kaist.ac.kr>
 
 ## Authors
 
-Seongmin Kim <dallas1004@gmail.com><br />
-Juhyeng Han <sparkly9399@gmail.com><br />
-Jaehyeong Ha <thundershower@kaist.ac.kr><br />
-Taesoo Kim <taesoo@gatech.edu><br />
+Seongmin Kim <dallas1004@gmail.com>
+
+Juhyeng Han <sparkly9399@gmail.com>
+
+Jaehyeong Ha <thundershower@kaist.ac.kr>
+
+Taesoo Kim <taesoo@gatech.edu>
+
 Dongsu Han <dongsuh@ee.kaist.ac.kr>
 
 ## Publications

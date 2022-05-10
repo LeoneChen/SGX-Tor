@@ -68,7 +68,7 @@ static const ed25519_impl_t impl_ref10 = {
 };
 
 static const ed25519_impl_t impl_donna = {
-  ed25519_donna_selftest,
+  // ed25519_donna_selftest,
 
   ed25519_donna_seckey,
   ed25519_donna_seckey_expand,

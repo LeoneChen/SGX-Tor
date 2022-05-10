@@ -32,7 +32,7 @@
 /* Enclave.edl - Top EDL file. */
 
 enclave {
-    
+    from "sgx_tstdc.edl" import sgx_thread_wait_untrusted_event_ocall, sgx_thread_set_untrusted_event_ocall, sgx_thread_setwait_untrusted_events_ocall, sgx_thread_set_multiple_untrusted_events_ocall;
     include "user_types.h" /* buffer_t */
 
     /* Import ECALL/OCALL from sub-directory EDLs.

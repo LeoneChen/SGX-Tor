@@ -1,0 +1,12 @@
+[submodule "Enclave/TrustedLibrary/LibEvent_SGX"]
+	path = Enclave/TrustedLibrary/LibEvent_SGX
+	url = git@github.com:LeoneChen/libevent.git
+	branch = libevent-sgx
+[submodule "Enclave/TrustedLibrary/OpenSSL_SGX"]
+	path = Enclave/TrustedLibrary/OpenSSL_SGX
+	url = git@github.com:LeoneChen/openssl.git
+	branch = openssl-sgx
+[submodule "Enclave/TrustedLibrary/zlib-1.2.8"]
+	path = Enclave/TrustedLibrary/zlib-1.2.8
+	url = git@github.com:LeoneChen/zlib.git
+	branch = v1.2.8
