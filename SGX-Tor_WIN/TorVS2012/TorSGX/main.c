@@ -2088,7 +2088,6 @@ do_main_loop(void)
   diff = (end - start)/(double)1000;
   printf("Time for init_keys : %lf\n", diff);
   printf("Context switch = %d\n", ocall_num);
-  while(1);
 #endif
 
   /* Set up our buckets */

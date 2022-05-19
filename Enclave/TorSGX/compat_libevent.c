@@ -230,9 +230,6 @@ tor_libevent_initialize(tor_libevent_cfg *torcfg)
 
     the_event_base = event_base_new_with_config(cfg);
 
-    printf("Here!\n");
-    while(1);
-
     event_config_free(cfg);
 
     if (using_threads && the_event_base == NULL && attempts < 2) {

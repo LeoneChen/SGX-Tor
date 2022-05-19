@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/app",
             "args": [
                 "-f",
-                "/etc/tor/torrc"
+                "/home/leone/torrc"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

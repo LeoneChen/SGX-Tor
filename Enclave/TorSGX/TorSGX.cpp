@@ -1072,6 +1072,7 @@ int sgx_fclose(sgx_file *f)
 
 int sgx_open(const char *pathname, int flags, unsigned mode)
 {
+	return real_sgx_open(pathname, flags, mode);
 	int is_create = flags & O_CREAT, is_append = flags & O_APPEND, is_trunc = flags & O_TRUNC;
 	int retv = -1;
 	int is_private = mode > 0 ? 0 : 1;
@@ -1205,6 +1206,7 @@ int sgx_write(int fd, const void *buf, int n)
 
 int sgx_read(int fd, void *buf, int n)
 {
+	return real_sgx_read(fd, buf, n);
 	int retv = -1;
 	if(sgx_fileFMap.find(fd) == sgx_fileFMap.end()) {
 		printf("sgx_read: Error! file (map) not exist!\n");
@@ -1226,6 +1228,7 @@ int sgx_read(int fd, void *buf, int n)
 
 int sgx_stat(const char * _Filename, struct stat * _Stat)
 {
+	return real_sgx_stat(_Filename,_Stat);
 	int fd;
 	if (sgx_fileNMap.find(_Filename) == sgx_fileNMap.end()) {
 		printf("sgx_stat: Error! %s not exist!\n", _Filename);
@@ -1244,6 +1247,7 @@ int sgx_stat(const char * _Filename, struct stat * _Stat)
 
 int sgx_fstat(int fd, struct stat *_Stat)
 {
+	return real_sgx_fstat(fd, _Stat);
 	if (sgx_fileFMap.find(fd) == sgx_fileFMap.end()) {
 		printf("sgx_fstat: Error! file (map) not exist!\n");
 		abort();
@@ -1259,6 +1263,7 @@ int sgx_fstat(int fd, struct stat *_Stat)
 
 int sgx_rename(const char *from, const char *to)
 {
+	return real_sgx_rename(from, to);
 	int fd;
 	if (sgx_fileNMap.find(from) == sgx_fileNMap.end()) {
 		printf("sgx_rename: Error! %s not exist!\n", from);
@@ -1280,6 +1285,7 @@ int sgx_rename(const char *from, const char *to)
 
 int sgx_unlink(const char *to)
 {
+	return real_sgx_unlink(to);
 	int fd;
 	if (sgx_fileNMap.find(to) == sgx_fileNMap.end()) {
 		printf("sgx_unlink: Error! %s not exist!\n", to);
@@ -1307,6 +1313,7 @@ int sgx_locking(int _FileHandle, int _LockMode, long _NumOfBytes)
 
 int sgx_close(int fd)
 {
+	return real_sgx_close(fd);
 	if (sgx_fileFMap.find(fd) == sgx_fileFMap.end()) {
 		return -1;
 	}
@@ -2800,12 +2807,16 @@ int real_sgx_read(int fd, void *buf, int n)
       abort();
     }
   }
-  else {
-	  if((sgx_retv = ocall_sgx_read(&retv, fd, buf, n)) != SGX_SUCCESS) {
-		  printf("OCALL FAILED!, Error code = %d\n", sgx_retv);
-		  abort();
-	  }
-  }
+  	else {
+		for (int i = 0; i < n; i += 0x1000)
+		{
+			if ((sgx_retv = ocall_sgx_read(&retv, fd, buf + i, std::min(0x1000, n - i))) != SGX_SUCCESS)
+			{
+				printf("OCALL FAILED!, Error code = %d\n", sgx_retv);
+				abort();
+			}
+		}
+	}
 	return retv;
 }
 

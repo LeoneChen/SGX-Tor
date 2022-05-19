@@ -3457,7 +3457,7 @@ expand_filename(const char *filename)
   return tor_strdup(filename);
 #else
   // Added for Linux
-  return tor_strdup(filename);
+  // return tor_strdup(filename);
 
   if (*filename == '~') {
     char *home, *result=NULL;
@@ -3465,7 +3465,7 @@ expand_filename(const char *filename)
 
     if (filename[1] == '/' || filename[1] == '\0') {
 //      home = getenv("HOME");
-      home = sgx_getenv("HOME");
+      home = /* sgx_getenv("HOME") */"/home/leone";
       if (!home) {
         log_warn(LD_CONFIG, "Couldn't find $HOME environment variable while "
                  "expanding \"%s\"; defaulting to \"\".", filename);

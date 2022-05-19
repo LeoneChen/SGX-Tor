@@ -193,9 +193,7 @@ tor_open_cloexec(const char *path, int flags, unsigned mode)
   log_debug(LD_FS, "Opening %s with flags %x", p, flags);
   fd = sgx_open(p, flags, mode);
 
-  printf("tor_open_cloexec\n");
-  while(1);
-
+  // printf("tor_open_cloexec\n");
 #ifdef FD_CLOEXEC
   if (fd >= 0) {
 //    if (fcntl(fd, F_SETFD, FD_CLOEXEC) == -1) {
@@ -246,10 +244,6 @@ sgx_file *
 tor_fopen_cloexec(const char *path, const char *mode)
 {
   sgx_file *result = sgx_fopen(path, mode);
-
-  printf("tor_fopen_cloexec\n");
-  while(1);
-
 #ifdef FD_CLOEXEC
   if (result != NULL) {
 //    if (fcntl(fileno(result), F_SETFD, FD_CLOEXEC) == -1) {

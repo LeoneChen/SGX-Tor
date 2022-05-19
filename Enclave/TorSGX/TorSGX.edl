@@ -59,7 +59,7 @@ enclave {
 		void *ocall_sgx_realloc(unsigned long long old_mem, int m_size);
 		void ocall_sgx_free(unsigned long long ptr);
 		
-		int ocall_sgx_fileno_stdout(void);
+		int ocall_sgx_fileno_stdout(void) propagate_errno;
 		/* void ocall_sgx_GetSystemTimeAsFileTime([out, size=ft_size]FILETIME *ft, int ft_size); */
 /*
 		unsigned long ocall_sgx_GetAdaptersAddresses(unsigned long family, unsigned long flags, 
@@ -72,34 +72,34 @@ enclave {
 */
 
 		void *ocall_sgx_pthread_getspecific(int key);
-		int ocall_sgx_pthread_setspecific(int key, [in, size=4]const void *value);
+		int ocall_sgx_pthread_setspecific(int key, [in, size=4]const void *value) propagate_errno;
 /*		void ocall_sgx_Sleep(unsigned long milli); */
 		void ocall_sgx_sleep(unsigned int seconds); 
 
-		int ocall_sgx_poll([in, out, size=fd_size]void *fds, int fd_size, int nfds, int timeout);
-		int ocall_sgx_gettimeofday([in, out, size=tv_size]struct timeval *tv, int tv_size); 
-		int ocall_sgx_clock_gettime(clockid_t clk_id, [out, size=tp_size]struct timespec *tp, int tp_size);
+		int ocall_sgx_poll([in, out, size=fd_size]void *fds, int fd_size, int nfds, int timeout) propagate_errno;
+		int ocall_sgx_gettimeofday([in, out, size=tv_size]struct timeval *tv, int tv_size) propagate_errno; 
+		int ocall_sgx_clock_gettime(clockid_t clk_id, [out, size=tp_size]struct timespec *tp, int tp_size) propagate_errno;
 
 		int ocall_sgx_select(int nfds, [in, out, size=fd_size]void *rfd, [in, out, size=fd_size]void *wfd,  [in, out, size=fd_size]void *efd, int fd_size, 
-																[in, size=tv_size]struct timeval *timeout, int tv_size);
+																[in, size=tv_size]struct timeval *timeout, int tv_size) propagate_errno;
 /*		void ocall_print_string([in, string] const char *str); */
 		/* Libevent start */
 /*		int ocall_sgx_accept(int s, [out, size=addr_size]struct sockaddr *addr, int addr_size, [in, out, size=4]int *addrlen); */
-		int ocall_sgx_setsockopt(int s, int level, int optname, [in, size=optlen]const char *optval, int optlen);
-		int ocall_sgx_socketpair(int domain, int type, int protocol, [out, size=2]int *sv);
-		int ocall_sgx_accept(int s, [out, size=addr_size]struct sockaddr *addr, int addr_size, [in, out, size=4]int *addrlen); 
-		int ocall_sgx_bind(int s, [in, size=addr_size]const struct sockaddr *addr, int addr_size);
-		int ocall_sgx_fstat(int fd, [out, size=buflen]struct stat *buf, int buflen);
-		int ocall_sgx_socket(int af, int type, int protocol);
-		int ocall_sgx_listen(int s, int backlog);
-		int ocall_sgx_connect(int s, [in, size=addrlen]const struct sockaddr *addr, int addrlen);
+		int ocall_sgx_setsockopt(int s, int level, int optname, [in, size=optlen]const char *optval, int optlen) propagate_errno;
+		int ocall_sgx_socketpair(int domain, int type, int protocol, [out, count=2]int *sv) propagate_errno;
+		int ocall_sgx_accept(int s, [out, size=addr_size]struct sockaddr *addr, int addr_size, [in, out, size=4]int *addrlen) propagate_errno; 
+		int ocall_sgx_bind(int s, [in, size=addr_size]const struct sockaddr *addr, int addr_size) propagate_errno;
+		int ocall_sgx_fstat(int fd, [out, size=buflen]struct stat *buf, int buflen) propagate_errno;
+		int ocall_sgx_socket(int af, int type, int protocol) propagate_errno;
+		int ocall_sgx_listen(int s, int backlog) propagate_errno;
+		int ocall_sgx_connect(int s, [in, size=addrlen]const struct sockaddr *addr, int addrlen) propagate_errno;
 /*		int ocall_sgx_ioctlsocket(int s, long cmd, [in, out, size=argp_len]unsigned long *argp, int argp_len); 
 		void ocall_sgx_EnterCriticalSection([in, size=lock_len]void *lock, int lock_len);
 		void ocall_sgx_LeaveCriticalSection([in, size=lock_len]void *lock, int lock_len);
 		void ocall_sgx_DeleteCriticalSection([in, size=lock_len]void *lock, int lock_len);
 		void ocall_sgx_InitializeCriticalSectionAndSpinCount([in, size=lock_len]void *lock, int lock_len, int count);
 */
-		struct hostent *ocall_sgx_gethostbyname([in, string]const char *name); 
+		struct hostent *ocall_sgx_gethostbyname([in, string]const char *name) propagate_errno; 
 /*
 		void ocall_sgx_WaitForSingleObject(int handle, unsigned long ms_);
 		int ocall_sgx_CryptGenRandom(unsigned long long prov, int buf_len, [out, size=buf_len]unsigned char *buf);
@@ -111,99 +111,99 @@ enclave {
 		unsigned ocall_sgx_GetSystemDirectory([out, size=uSize]char *lpBuffer, unsigned int uSize);
 		unsigned long long ocall_sgx_LoadLibrary([in, string]char* lpFileName);
 */
-		int ocall_sgx_open([in, string]const char *pathname, int flags, unsigned mode);
+		int ocall_sgx_open([in, string]const char *pathname, int flags, unsigned mode) propagate_errno;
 /*		void ocall_sgx_ftime([out,size=size_timeb]struct _timeb *tb, int size_timeb); */
-		void ocall_sgx_ftime([out,size=size_timeb]struct timeb *tb, int size_timeb); 
+		void ocall_sgx_ftime([out,size=size_timeb]struct timeb *tb, int size_timeb) propagate_errno; 
 /*
 		int ocall_sgx_CreateSemaphore([in, size=attr_len]void *attr, int attr_len, long initcount, long maxcount, [in, size=name_len]void *name, int name_len);
 		int ocall_sgx_ReleaseSemaphore(int hSemaphore, long lReleaseCount, [in, size=lp_len]long* lpPreviousCount, int lp_len);
 		int ocall_sgx_CryptAcquireContext([out, size=8]void *prov, [in, size=0]void *container, 
 								[in, size=0]void *provider, unsigned long provtype, unsigned long dwflags);
 */
-		int ocall_sgx_getenv([in,size=envlen]const char *env, int envlen, [out,size=ret_len]char *ret_str,int ret_len);
-		int ocall_sgx_getaddrinfo([in, string]const char *node, [in, string]const char *service, [in, size=hints_len]const void *hints, int hints_len, [out, size=res_len]void **res, int res_len); 
-		void ocall_sgx_freeaddrinfo([in,out, size=res_len]void *res, int res_len);
-		int ocall_sgx_getsockname(int s, [out, size=nlen]struct sockaddr *name, int nlen, [in, size=4]int *namelen);
-		int ocall_sgx_getsockopt(int s, int level, int optname, [out, size=optval_len]char *optval, int optval_len, [in,out, size=4]int* optlen);
-		void ocall_sgx_getservbyname([in, size=name_len]const char *name, int name_len, [in, size=proto_len]const char *proto, int proto_len, [out, size=serv_len]void *serv_ptr, int serv_len);
-		void ocall_sgx_getprotobynumber(int number, [out, size=proto_len]void *proto, int proto_len, [out, size=proto_name_len]char *proto_name, int proto_name_len);
+		int ocall_sgx_getenv([in,size=envlen]const char *env, int envlen, [out,size=ret_len]char *ret_str,int ret_len) propagate_errno;
+		int ocall_sgx_getaddrinfo([in, string]const char *node, [in, string]const char *service, [in, size=hints_len]const void *hints, int hints_len, [out, size=res_len]void **res, int res_len) propagate_errno; 
+		void ocall_sgx_freeaddrinfo([in,out, size=res_len]void *res, int res_len) propagate_errno;
+		int ocall_sgx_getsockname(int s, [out, size=nlen]struct sockaddr *name, int nlen, [in, size=4]int *namelen) propagate_errno;
+		int ocall_sgx_getsockopt(int s, int level, int optname, [out, size=optval_len]char *optval, int optval_len, [in,out, size=4]int* optlen) propagate_errno;
+		void ocall_sgx_getservbyname([in, size=name_len]const char *name, int name_len, [in, size=proto_len]const char *proto, int proto_len, [out, size=serv_len]void *serv_ptr, int serv_len) propagate_errno;
+		void ocall_sgx_getprotobynumber(int number, [out, size=proto_len]void *proto, int proto_len, [out, size=proto_name_len]char *proto_name, int proto_name_len) propagate_errno;
 /*
 		unsigned long long ocall_sgx_beginthread([in,size = port_len]void *port, int port_len);
 		void ocall_sgx_endthread(void);
 		int ocall_sgx_PostQueuedCompletionStatus(int p, unsigned int n, unsigned int key, [in, size=o_len]void *o, int o_len);
 */
-		int ocall_sgx_pthread_create([in, size=port_len]void *port, int port_len);
-		int ocall_sgx_epoll_wait(int epfd, [in,out, size=events_len]void *events, int events_len, int maxevents, int timeout);
-		int ocall_sgx_epoll_ctl(int epfd, int op, int fd, [in,out, size=event_len]void *event, int event_len);
-		int ocall_sgx_epoll_create(int size);
-		void ocall_sgx_signal(int signum, int f_id);
-		int ocall_sgx_eventfd(unsigned int initval, int flags);
+		int ocall_sgx_pthread_create([in, size=port_len]void *port, int port_len) propagate_errno;
+		int ocall_sgx_epoll_wait(int epfd, [in,out, size=events_len]void *events, int events_len, int maxevents, int timeout) propagate_errno;
+		int ocall_sgx_epoll_ctl(int epfd, int op, int fd, [in,out, size=event_len]void *event, int event_len) propagate_errno;
+		int ocall_sgx_epoll_create(int size) propagate_errno;
+		void ocall_sgx_signal(int signum, int f_id) propagate_errno;
+		int ocall_sgx_eventfd(unsigned int initval, int flags) propagate_errno;
 /*		int ocall_sgx_atexit(int f_id); */
-		int ocall_sgx_sigfillset([in,out, size=setlen]void *set, int setlen);
-		int ocall_sgx_sigemptyset([in,out, size=setlen]void *set, int setlen);
-		int ocall_sgx_sigaction(int signum, [in, size=act_len]const void *act, int act_len, [in,out, size=oldact_len]void *oldact, int oldact_len);
-		int ocall_sgx_fcntl(int fd, int cmd, long arg);
-		int ocall_sgx_fcntl2(int fd, int cmd, [in, size=lock_len]void *lock, int lock_len);
-		int ocall_sgx_chmod([in, string]const char *pathname, int mode);
-		int ocall_sgx_chdir([in, string]const char *path);
-		int ocall_sgx_pipe([in,out, size=2]int *pipefd);
-		int ocall_sgx_sysctl([in, size=nlen]int *name, int nlen, [in,out, size=oldval_len]void *oldval, int oldval_len, [in,out, size=8]size_t *oldlenp, [in,out, size=newlen]void *newval, size_t newlen);
-		pid_t ocall_sgx_fork(void);
-		unsigned short ocall_sgx_ntohs(unsigned short netshort);
-		unsigned long ocall_sgx_ntohl(unsigned long netlong);
-		time_t ocall_get_time([out, size=t_len]time_t *timep, int t_len);
-		int ocall_sgx_recv(int s, [out, size=len]char *buf, int len, int flags);
-		int ocall_sgx_direct_recv(int s, unsigned long long buf, int len, int flags);
+		int ocall_sgx_sigfillset([in,out, size=setlen]void *set, int setlen) propagate_errno;
+		int ocall_sgx_sigemptyset([in,out, size=setlen]void *set, int setlen) propagate_errno;
+		int ocall_sgx_sigaction(int signum, [in, size=act_len]const void *act, int act_len, [in,out, size=oldact_len]void *oldact, int oldact_len) propagate_errno;
+		int ocall_sgx_fcntl(int fd, int cmd, long arg) propagate_errno;
+		int ocall_sgx_fcntl2(int fd, int cmd, [in, size=lock_len]void *lock, int lock_len) propagate_errno;
+		int ocall_sgx_chmod([in, string]const char *pathname, int mode) propagate_errno;
+		int ocall_sgx_chdir([in, string]const char *path) propagate_errno;
+		int ocall_sgx_pipe([in,out, size=2]int *pipefd) propagate_errno;
+		int ocall_sgx_sysctl([in, size=nlen]int *name, int nlen, [in,out, size=oldval_len]void *oldval, int oldval_len, [in,out, size=8]size_t *oldlenp, [in,out, size=newlen]void *newval, size_t newlen) propagate_errno;
+		pid_t ocall_sgx_fork(void) propagate_errno;
+		unsigned short ocall_sgx_ntohs(unsigned short netshort) propagate_errno;
+		unsigned long ocall_sgx_ntohl(unsigned long netlong) propagate_errno;
+		time_t ocall_get_time([out, size=t_len]time_t *timep, int t_len) propagate_errno;
+		int ocall_sgx_recv(int s, [out, size=len]char *buf, int len, int flags) propagate_errno;
+		int ocall_sgx_direct_recv(int s, unsigned long long buf, int len, int flags) propagate_errno;
 		int ocall_sgx_send(int s, [in, size=len]const char *buf, int len, int flags);
-		int ocall_sgx_direct_send(int s, unsigned long long buf, int len, int flags);
+		int ocall_sgx_direct_send(int s, unsigned long long buf, int len, int flags) propagate_errno;
 /*
 		int ocall_sgx_WSAGetLastError(void);
 		void ocall_sgx_SetLastError(int e);
 		void ocall_sgx_WSASetLastError(int e);
 */
-		int ocall_sgx_rename([in, string]const char *from_str, [in, string]const char *to_str);
-		int ocall_sgx_unlink([in, string]const char *filename);
-		int ocall_sgx_close(int fd);
-		int ocall_sgx_ftruncate(int fd, off_t length);
+		int ocall_sgx_rename([in, string]const char *from_str, [in, string]const char *to_str) propagate_errno;
+		int ocall_sgx_unlink([in, string]const char *filename) propagate_errno;
+		int ocall_sgx_close(int fd) propagate_errno;
+		int ocall_sgx_ftruncate(int fd, off_t length) propagate_errno;
 /*		int ocall_sgx_chsize(int fd, long val); */
 /*		int ocall_sgx_closesocket(int fd);   */
 /*		int ocall_sgx_shutdown(int fd); */
-		int ocall_sgx_shutdown(int fd, int how); 
-		void ocall_sgx_exit(int exit_status);
-		int ocall_sgx_write(int fd, [in, size=n]const void *buf, int n);
-		int ocall_sgx_direct_write(int fd, unsigned long long buf, int n);
-		int ocall_sgx_read(int fd, [out, size=n]void *buf, int n);
-		int ocall_sgx_direct_read(int fd, unsigned long long buf, int n);
-		pid_t ocall_sgx_waitpid(unsigned int pid, [in,out, size=status_len]int *_status, int status_len, int options);
-		pid_t ocall_sgx_getpid(void);
-		pid_t ocall_sgx_setsid(void);
-		int ocall_sgx_getgroups(int size, [in,out, size=list_num]unsigned int *list, int list_num);
-		int ocall_sgx_setgroups(size_t size, [in, size=list_num]const unsigned int *list, int list_num);
-		int ocall_sgx_setuid(unsigned int uid);
-		int ocall_sgx_setgid(unsigned int gid);
-		int ocall_sgx_seteuid(unsigned int uid);
-		int ocall_sgx_setegid(unsigned int gid);
-		int ocall_sgx_dup2(int oldfd, int newfd);
+		int ocall_sgx_shutdown(int fd, int how) propagate_errno; 
+		void ocall_sgx_exit(int exit_status) propagate_errno;
+		int ocall_sgx_write(int fd, [in, size=n]const void *buf, int n) propagate_errno;
+		int ocall_sgx_direct_write(int fd, unsigned long long buf, int n) propagate_errno;
+		int ocall_sgx_read(int fd, [out, size=n]void *buf, int n) propagate_errno;
+		int ocall_sgx_direct_read(int fd, unsigned long long buf, int n) propagate_errno;
+		pid_t ocall_sgx_waitpid(unsigned int pid, [in,out, size=status_len]int *_status, int status_len, int options) propagate_errno;
+		pid_t ocall_sgx_getpid(void) propagate_errno;
+		pid_t ocall_sgx_setsid(void) propagate_errno;
+		int ocall_sgx_getgroups(int size, [in,out, size=list_num]unsigned int *list, int list_num) propagate_errno;
+		int ocall_sgx_setgroups(size_t size, [in, size=list_num]const unsigned int *list, int list_num) propagate_errno;
+		int ocall_sgx_setuid(unsigned int uid) propagate_errno;
+		int ocall_sgx_setgid(unsigned int gid) propagate_errno;
+		int ocall_sgx_seteuid(unsigned int uid) propagate_errno;
+		int ocall_sgx_setegid(unsigned int gid) propagate_errno;
+		int ocall_sgx_dup2(int oldfd, int newfd) propagate_errno;
 		uid_t ocall_sgx_getuid(void);
-		gid_t ocall_sgx_getgid(void);
-		uid_t ocall_sgx_geteuid(void);
-		gid_t ocall_sgx_getegid(void);
-		off_t ocall_sgx_lseek(int fildes, off_t offset, int whence);
+		gid_t ocall_sgx_getgid(void) propagate_errno;
+		uid_t ocall_sgx_geteuid(void) propagate_errno;
+		gid_t ocall_sgx_getegid(void) propagate_errno;
+		off_t ocall_sgx_lseek(int fildes, off_t offset, int whence) propagate_errno;
 /*		int ocall_sgx_locking(int fd, int mode, long num); */
-		int ocall_sgx_gethostname([out, size=namelen]char *name, size_t namelen);
-		struct tm *ocall_sgx_localtime([in, size=t_len]const time_t *timep, int t_len);
-		struct tm *ocall_sgx_gmtime([in, size=t_len]const time_t *timep, int t_len);
-		time_t ocall_sgx_mktime([in, size=tm_len]struct tm *timeptr, int tm_len);
+		int ocall_sgx_gethostname([out, size=namelen]char *name, size_t namelen) propagate_errno;
+		struct tm *ocall_sgx_localtime([in, size=t_len]const time_t *timep, int t_len) propagate_errno;
+		struct tm *ocall_sgx_gmtime([in, size=t_len]const time_t *timep, int t_len) propagate_errno;
+		time_t ocall_sgx_mktime([in, size=tm_len]struct tm *timeptr, int tm_len) propagate_errno;
 /*		unsigned long ocall_sgx_GetNetworkParams([out, size=fixed_sz]void *fixed, unsigned long fixed_sz, [in, out, size=4]unsigned long *fixed_size); */
-		int ocall_sgx_sendto(int s, [in, size =len]const void *msg, int len, int flags, [in,size =tolen]const struct sockaddr *to, int tolen); 
+		int ocall_sgx_sendto(int s, [in, size =len]const void *msg, int len, int flags, [in,size =tolen]const struct sockaddr *to, int tolen) propagate_errno; 
 /*		int ocall_sgx_recvfrom(int s, [out, size=len]void *msg, int len, int flags, [out, size=frlen]struct sockaddr *fr, int frlen, [in, out, size=4]int *in_len); */
-		int ocall_sgx_recvfrom(int s, [out, size=len]void *msg, int len, int flags, [out, size=frlen]struct sockaddr *fr, int frlen, [in, out, size=4]int *in_len);
+		int ocall_sgx_recvfrom(int s, [out, size=len]void *msg, int len, int flags, [out, size=frlen]struct sockaddr *fr, int frlen, [in, out, size=4]int *in_len) propagate_errno;
 		/* int ocall_sgx_SHGetSpecialFolderPathA(HWND hwnd, [out, size=path_len]char *path, int path_len, int csidl, int fCreate); */
 /*		int ocall_sgx_fputs([in, string]const char *str, [in, out, size=stream_size]FILE *stream, int stream_size); */
-		int ocall_sgx_fclose([in, size=file_size]FILE *file, int file_size); 
-		int ocall_sgx_stat([in, string]const char  *filename, [out, size=stat_size]struct stat *st, int stat_size);
+		int ocall_sgx_fclose([in, size=file_size]FILE *file, int file_size) propagate_errno; 
+		int ocall_sgx_stat([in, string]const char  *filename, [out, size=stat_size]struct stat *st, int stat_size) propagate_errno;
 /*		int ocall_sgx_mkdir([in, string]const char *path); */
-		int ocall_sgx_mkdir([in, string]const char *path, int mode); 
+		int ocall_sgx_mkdir([in, string]const char *path, int mode) propagate_errno; 
 /*
 		int ocall_sgx_UnmapViewOfFile(unsigned long long  lpBaseAddress);
 		void *ocall_sgx_MapViewOfFile(
@@ -229,7 +229,7 @@ enclave {
 			unsigned long dwCreationDisposition,
 			unsigned long dwFlagsAndAttributes,
 			int hTemplateFile); */
-		long ocall_sgx_clock(void);
+		long ocall_sgx_clock(void) propagate_errno;
 /*		char *ocall_sgx_strdup([in, string]const char *str); */
 	};
 };

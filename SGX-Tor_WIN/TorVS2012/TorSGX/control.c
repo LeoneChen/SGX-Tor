@@ -5999,7 +5999,6 @@ control_event_bootstrap(bootstrap_status_t status, int progress)
 		end_time = sgx_clock();
 		diff = (end_time - start_time)/(double)1000;
 		printf("Time for bootstrapping : %lf\n", diff);
-		while(1);
 	}
 #endif
 

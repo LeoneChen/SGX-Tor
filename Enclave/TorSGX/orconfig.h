@@ -914,9 +914,11 @@ struct epoll_event {
     epoll_data_t data;      /* User data variable */
 };
 
-#define	NGROUPS_MAX	16	/* max number of supplemental group id's */
+// from /usr/include/linux/limits.h
+#define NGROUPS_MAX    65536	/* supplemental group IDs are available */
 
-#define SIG_SETMASK 3
+// from /usr/include/x86_64-linux-gnu/bits/sigaction.h
+#define	SIG_SETMASK   2		 /* Set the set of blocked signals.  */
 
 #define PTHREAD_MUTEX_NORMAL     0
 #define PTHREAD_MUTEX_RECURSIVE  1
@@ -1002,41 +1004,28 @@ typedef int pthread_condattr_t;
 #define INADDR_ANY              (unsigned long)0x00000000
 #define INADDR_LOOPBACK         0x7f000001
 
-/*
- * Option flags per-socket.
- */
-#define SO_DEBUG       0x0001  /* turn on debugging info recording */
-#define SO_ACCEPTCONN  0x0002  /* socket has had listen() */
-#define SO_REUSEADDR   0x0004  /* allow local address reuse */
-#define SO_KEEPALIVE   0x0008  /* keep connections alive */
-#define SO_DONTROUTE   0x0010  /* just use interface addresses */
-#define SO_BROADCAST   0x0020  /* permit sending of broadcast msgs */
-#define SO_USELOOPBACK 0x0040  /* bypass hardware when possible */
-#define SO_LINGER      0x0080  /* linger on close if data present */
-#define SO_OOBINLINE   0x0100  /* leave received OOB data in line */
-#define SO_REUSEPORT   0x0200  /* allow local address & port reuse */
+// from /usr/include/x86_64-linux-gnu/bits/socket-constants.h
+#define SOL_SOCKET 1
+#define SO_ACCEPTCONN 30
+#define SO_BROADCAST 6
+#define SO_DONTROUTE 5
+#define SO_ERROR 4
+#define SO_KEEPALIVE 9
+#define SO_LINGER 13
+#define SO_OOBINLINE 10
+#define SO_RCVBUF 8
+#define SO_RCVLOWAT 18
+#define SO_RCVTIMEO 20
+#define SO_REUSEADDR 2
+#define SO_SNDBUF 7
+#define SO_SNDLOWAT 19
+#define SO_SNDTIMEO 21
+#define SO_TYPE 3
 
-/*
- * Additional options, not kept in so_options.
- */
-#define SO_SNDBUF	0x1001		/* send buffer size */
-#define SO_RCVBUF	0x1002		/* receive buffer size */
-#define SO_SNDLOWAT	0x1003		/* send low-water mark */
-#define SO_RCVLOWAT	0x1004		/* receive low-water mark */
-#define SO_SNDTIMEO	0x1005		/* send timeout */
-#define SO_RCVTIMEO	0x1006		/* receive timeout */
-#define	SO_ERROR	0x1007		/* get error status and clear */
-#define	SO_TYPE		0x1008		/* get socket type */
 
-/*
- * Maximum queue length specifiable by listen.
- */
-#define	SOMAXCONN	5
-
-/*
- * Level number for (get/set)sockopt() to apply to socket itself.
- */
-#define	SOL_SOCKET	0xffff		/* options for socket level */
+// from /usr/include/x86_64-linux-gnu/bits/socket.h
+/* Maximum queue length specifiable by listen.  */
+#define SOMAXCONN	4096
 
 #if 0
 #define EPERM           1
@@ -1134,66 +1123,30 @@ typedef int pthread_condattr_t;
 #define EWOULDBLOCK     140
 #endif
 
-#define _O_RDONLY       0x0000  /* open for reading only */
-#define _O_WRONLY       0x0001  /* open for writing only */
-#define _O_RDWR         0x0002  /* open for reading and writing */
-#define _O_NONBLOCK     0x4000
-#define _O_APPEND       0x0008  /* writes done at eof */
-
-#define _O_CREAT        0x0100  /* create and open file */
-#define _O_TRUNC        0x0200  /* open and truncate */
-#define _O_EXCL         0x0400  /* open only if file doesn't already exist */
-
-/* O_TEXT files have <cr><lf> sequences translated to <lf> on read()'s,
-** and <lf> sequences translated to <cr><lf> on write()'s
-*/
-
-#define _O_TEXT         0x4000  /* file mode is text (translated) */
-#define _O_BINARY       0x8000  /* file mode is binary (untranslated) */
-#define _O_WTEXT        0x10000 /* file mode is UTF16 (translated) */
-#define _O_U16TEXT      0x20000 /* file mode is UTF16 no BOM (translated) */
-#define _O_U8TEXT       0x40000 /* file mode is UTF8  no BOM (translated) */
-
-/* macro to translate the C 2.0 name used to force binary mode for files */
-
-#define _O_RAW  _O_BINARY
-
-/* Open handle inherit bit */
-
-#define _O_NOINHERIT    0x0080  /* child process doesn't inherit file */
-
-/* Temporary file bit - file is deleted when last handle is closed */
-
-#define _O_TEMPORARY    0x0040  /* temporary file bit */
-
-/* temporary access hint */
-
-#define _O_SHORT_LIVED  0x1000  /* temporary storage file, try not to flush */
-
-/* directory access hint */
-
-#define _O_OBTAIN_DIR   0x2000  /* get information about a directory */
-
-/* sequential/random access hints */
-
-#define _O_SEQUENTIAL   0x0020  /* file access is primarily sequential */
-#define _O_RANDOM       0x0010  /* file access is primarily random */
-
-#define O_RDONLY        _O_RDONLY
-#define O_WRONLY        _O_WRONLY
-#define O_RDWR          _O_RDWR
-#define O_NONBLOCK	_O_NONBLOCK
-#define O_APPEND        _O_APPEND
-#define O_CREAT         _O_CREAT
-#define O_TRUNC         _O_TRUNC
-#define O_EXCL          _O_EXCL
-#define O_TEXT          _O_TEXT
-#define O_BINARY        _O_BINARY
-#define O_RAW           _O_BINARY
-#define O_TEMPORARY     _O_TEMPORARY
-#define O_NOINHERIT     _O_NOINHERIT
-#define O_SEQUENTIAL    _O_SEQUENTIAL
-#define O_RANDOM        _O_RANDOM
+// from /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h
+/* open/fcntl.  */
+#define O_ACCMODE	   0003
+#define O_RDONLY	     00
+#define O_WRONLY	     01
+#define O_RDWR		     02
+#ifndef O_CREAT
+# define O_CREAT	   0100	/* Not fcntl.  */
+#endif
+#ifndef O_EXCL
+# define O_EXCL		   0200	/* Not fcntl.  */
+#endif
+#ifndef O_NOCTTY
+# define O_NOCTTY	   0400	/* Not fcntl.  */
+#endif
+#ifndef O_TRUNC
+# define O_TRUNC	  01000	/* Not fcntl.  */
+#endif
+#ifndef O_APPEND
+# define O_APPEND	  02000
+#endif
+#ifndef O_NONBLOCK
+# define O_NONBLOCK	  04000
+#endif
 
 #ifndef SEEK_SET
 #define SEEK_SET                0       // Seek relative to begining of file
@@ -1445,122 +1398,167 @@ struct in_addr {
 					/* other similar things on the	*/
 					/* user level.			*/
 
-#define AF_UNSPEC       0               // unspecified
-#define AF_UNIX         1               // local to host (pipes, portals)
-#define AF_INET         2               // internetwork: UDP, TCP, etc.
-#define AF_IMPLINK      3               // arpanet imp addresses
-#define AF_PUP          4               // pup protocols: e.g. BSP
-#define AF_CHAOS        5               // mit CHAOS protocols
-#define AF_NS           6               // XEROX NS protocols
-#define AF_IPX          AF_NS           // IPX protocols: IPX, SPX, etc.
-#define AF_ISO          7               // ISO protocols
-#define AF_OSI          AF_ISO          // OSI is ISO
-#define AF_ECMA         8               // european computer manufacturers
-#define AF_DATAKIT      9               // datakit protocols
-#define AF_CCITT        10              // CCITT protocols, X.25 etc
-#define AF_SNA          11              // IBM SNA
-#define AF_DECnet       12              // DECnet
-#define AF_DLI          13              // Direct data link interface
-#define AF_LAT          14              // LAT
-#define AF_HYLINK       15              // NSC Hyperchannel
-#define AF_APPLETALK    16              // AppleTalk
-#define AF_NETBIOS      17              // NetBios-style addresses
-#define AF_VOICEVIEW    18              // VoiceView
-#define AF_FIREFOX      19              // Protocols from Firefox
-#define AF_UNKNOWN1     20              // Somebody is using this!
-#define AF_BAN          21              // Banyan
-#define AF_ATM          22              // Native ATM Services
-#define AF_INET6        23              // Internetwork Version 6
-#define AF_CLUSTER      24              // Microsoft Wolfpack
-#define AF_12844        25              // IEEE 1284.4 WG AF
-#define AF_IRDA         26              // IrDA
-#define AF_NETDES       28              // Network Designers OSI & gateway
+// from /usr/include/x86_64-linux-gnu/bits/socket.h
+/* Protocol families.  */
+#define PF_UNSPEC	0	/* Unspecified.  */
+#define PF_LOCAL	1	/* Local to host (pipes and file-domain).  */
+#define PF_UNIX		PF_LOCAL /* POSIX name for PF_LOCAL.  */
+#define PF_FILE		PF_LOCAL /* Another non-standard name for PF_LOCAL.  */
+#define PF_INET		2	/* IP protocol family.  */
+#define PF_AX25		3	/* Amateur Radio AX.25.  */
+#define PF_IPX		4	/* Novell Internet Protocol.  */
+#define PF_APPLETALK	5	/* Appletalk DDP.  */
+#define PF_NETROM	6	/* Amateur radio NetROM.  */
+#define PF_BRIDGE	7	/* Multiprotocol bridge.  */
+#define PF_ATMPVC	8	/* ATM PVCs.  */
+#define PF_X25		9	/* Reserved for X.25 project.  */
+#define PF_INET6	10	/* IP version 6.  */
+#define PF_ROSE		11	/* Amateur Radio X.25 PLP.  */
+#define PF_DECnet	12	/* Reserved for DECnet project.  */
+#define PF_NETBEUI	13	/* Reserved for 802.2LLC project.  */
+#define PF_SECURITY	14	/* Security callback pseudo AF.  */
+#define PF_KEY		15	/* PF_KEY key management API.  */
+#define PF_NETLINK	16
+#define PF_ROUTE	PF_NETLINK /* Alias to emulate 4.4BSD.  */
+#define PF_PACKET	17	/* Packet family.  */
+#define PF_ASH		18	/* Ash.  */
+#define PF_ECONET	19	/* Acorn Econet.  */
+#define PF_ATMSVC	20	/* ATM SVCs.  */
+#define PF_RDS		21	/* RDS sockets.  */
+#define PF_SNA		22	/* Linux SNA Project */
+#define PF_IRDA		23	/* IRDA sockets.  */
+#define PF_PPPOX	24	/* PPPoX sockets.  */
+#define PF_WANPIPE	25	/* Wanpipe API sockets.  */
+#define PF_LLC		26	/* Linux LLC.  */
+#define PF_IB		27	/* Native InfiniBand address.  */
+#define PF_MPLS		28	/* MPLS.  */
+#define PF_CAN		29	/* Controller Area Network.  */
+#define PF_TIPC		30	/* TIPC sockets.  */
+#define PF_BLUETOOTH	31	/* Bluetooth sockets.  */
+#define PF_IUCV		32	/* IUCV sockets.  */
+#define PF_RXRPC	33	/* RxRPC sockets.  */
+#define PF_ISDN		34	/* mISDN sockets.  */
+#define PF_PHONET	35	/* Phonet sockets.  */
+#define PF_IEEE802154	36	/* IEEE 802.15.4 sockets.  */
+#define PF_CAIF		37	/* CAIF sockets.  */
+#define PF_ALG		38	/* Algorithm sockets.  */
+#define PF_NFC		39	/* NFC sockets.  */
+#define PF_VSOCK	40	/* vSockets.  */
+#define PF_KCM		41	/* Kernel Connection Multiplexor.  */
+#define PF_QIPCRTR	42	/* Qualcomm IPC Router.  */
+#define PF_SMC		43	/* SMC sockets.  */
+#define PF_XDP		44	/* XDP sockets.  */
+#define PF_MAX		45	/* For now..  */
 
-#define PF_UNSPEC       AF_UNSPEC
-#define PF_UNIX         AF_UNIX
-#define PF_INET         AF_INET
-#define PF_IMPLINK      AF_IMPLINK
-#define PF_PUP          AF_PUP
-#define PF_CHAOS        AF_CHAOS
-#define PF_NS           AF_NS
-#define PF_IPX          AF_IPX
-#define PF_ISO          AF_ISO
-#define PF_OSI          AF_OSI
-#define PF_ECMA         AF_ECMA
-#define PF_DATAKIT      AF_DATAKIT
-#define PF_CCITT        AF_CCITT
-#define PF_SNA          AF_SNA
-#define PF_DECnet       AF_DECnet
-#define PF_DLI          AF_DLI
-#define PF_LAT          AF_LAT
-#define PF_HYLINK       AF_HYLINK
-#define PF_APPLETALK    AF_APPLETALK
-#define PF_VOICEVIEW    AF_VOICEVIEW
-#define PF_FIREFOX      AF_FIREFOX
-#define PF_UNKNOWN1     AF_UNKNOWN1
-#define PF_BAN          AF_BAN
-#define PF_ATM          AF_ATM
-#define PF_INET6        AF_INET6
+/* Address families.  */
+#define AF_UNSPEC	PF_UNSPEC
+#define AF_LOCAL	PF_LOCAL
+#define AF_UNIX		PF_UNIX
+#define AF_FILE		PF_FILE
+#define AF_INET		PF_INET
+#define AF_AX25		PF_AX25
+#define AF_IPX		PF_IPX
+#define AF_APPLETALK	PF_APPLETALK
+#define AF_NETROM	PF_NETROM
+#define AF_BRIDGE	PF_BRIDGE
+#define AF_ATMPVC	PF_ATMPVC
+#define AF_X25		PF_X25
+#define AF_INET6	PF_INET6
+#define AF_ROSE		PF_ROSE
+#define AF_DECnet	PF_DECnet
+#define AF_NETBEUI	PF_NETBEUI
+#define AF_SECURITY	PF_SECURITY
+#define AF_KEY		PF_KEY
+#define AF_NETLINK	PF_NETLINK
+#define AF_ROUTE	PF_ROUTE
+#define AF_PACKET	PF_PACKET
+#define AF_ASH		PF_ASH
+#define AF_ECONET	PF_ECONET
+#define AF_ATMSVC	PF_ATMSVC
+#define AF_RDS		PF_RDS
+#define AF_SNA		PF_SNA
+#define AF_IRDA		PF_IRDA
+#define AF_PPPOX	PF_PPPOX
+#define AF_WANPIPE	PF_WANPIPE
+#define AF_LLC		PF_LLC
+#define AF_IB		PF_IB
+#define AF_MPLS		PF_MPLS
+#define AF_CAN		PF_CAN
+#define AF_TIPC		PF_TIPC
+#define AF_BLUETOOTH	PF_BLUETOOTH
+#define AF_IUCV		PF_IUCV
+#define AF_RXRPC	PF_RXRPC
+#define AF_ISDN		PF_ISDN
+#define AF_PHONET	PF_PHONET
+#define AF_IEEE802154	PF_IEEE802154
+#define AF_CAIF		PF_CAIF
+#define AF_ALG		PF_ALG
+#define AF_NFC		PF_NFC
+#define AF_VSOCK	PF_VSOCK
+#define AF_KCM		PF_KCM
+#define AF_QIPCRTR	PF_QIPCRTR
+#define AF_SMC		PF_SMC
+#define AF_XDP		PF_XDP
+#define AF_MAX		PF_MAX
 
-typedef enum {
-#if(_WIN32_WINNT >= 0x0501)
-    IPPROTO_HOPOPTS       = 0,  // IPv6 Hop-by-Hop options
-#endif//(_WIN32_WINNT >= 0x0501)
-    IPPROTO_ICMP          = 1,
-    IPPROTO_IGMP          = 2,
-    IPPROTO_GGP           = 3,
-#if(_WIN32_WINNT >= 0x0501)
-    IPPROTO_IPV4          = 4,
-#endif//(_WIN32_WINNT >= 0x0501)
-#if(_WIN32_WINNT >= 0x0600)
-    IPPROTO_ST            = 5,
-#endif//(_WIN32_WINNT >= 0x0600)
-    IPPROTO_TCP           = 6,
-#if(_WIN32_WINNT >= 0x0600)
-    IPPROTO_CBT           = 7,
-    IPPROTO_EGP           = 8,
-    IPPROTO_IGP           = 9,
-#endif//(_WIN32_WINNT >= 0x0600)
-    IPPROTO_PUP           = 12,
-    IPPROTO_UDP           = 17,
-    IPPROTO_IDP           = 22,
-#if(_WIN32_WINNT >= 0x0600)
-    IPPROTO_RDP           = 27,
-#endif//(_WIN32_WINNT >= 0x0600)
 
-#if(_WIN32_WINNT >= 0x0501)
-    IPPROTO_IPV6          = 41, // IPv6 header
-    IPPROTO_ROUTING       = 43, // IPv6 Routing header
-    IPPROTO_FRAGMENT      = 44, // IPv6 fragmentation header
-    IPPROTO_ESP           = 50, // encapsulating security payload
-    IPPROTO_AH            = 51, // authentication header
-    IPPROTO_ICMPV6        = 58, // ICMPv6
-    IPPROTO_NONE          = 59, // IPv6 no next header
-    IPPROTO_DSTOPTS       = 60, // IPv6 Destination options
-#endif//(_WIN32_WINNT >= 0x0501)
+// from /usr/include/netinet/in.h
+/* Standard well-defined IP protocols.  */
+enum
+  {
+    IPPROTO_IP = 0,	   /* Dummy protocol for TCP.  */
+#define IPPROTO_IP		IPPROTO_IP
+    IPPROTO_ICMP = 1,	   /* Internet Control Message Protocol.  */
+#define IPPROTO_ICMP		IPPROTO_ICMP
+    IPPROTO_IGMP = 2,	   /* Internet Group Management Protocol. */
+#define IPPROTO_IGMP		IPPROTO_IGMP
+    IPPROTO_IPIP = 4,	   /* IPIP tunnels (older KA9Q tunnels use 94).  */
+#define IPPROTO_IPIP		IPPROTO_IPIP
+    IPPROTO_TCP = 6,	   /* Transmission Control Protocol.  */
+#define IPPROTO_TCP		IPPROTO_TCP
+    IPPROTO_EGP = 8,	   /* Exterior Gateway Protocol.  */
+#define IPPROTO_EGP		IPPROTO_EGP
+    IPPROTO_PUP = 12,	   /* PUP protocol.  */
+#define IPPROTO_PUP		IPPROTO_PUP
+    IPPROTO_UDP = 17,	   /* User Datagram Protocol.  */
+#define IPPROTO_UDP		IPPROTO_UDP
+    IPPROTO_IDP = 22,	   /* XNS IDP protocol.  */
+#define IPPROTO_IDP		IPPROTO_IDP
+    IPPROTO_TP = 29,	   /* SO Transport Protocol Class 4.  */
+#define IPPROTO_TP		IPPROTO_TP
+    IPPROTO_DCCP = 33,	   /* Datagram Congestion Control Protocol.  */
+#define IPPROTO_DCCP		IPPROTO_DCCP
+    IPPROTO_IPV6 = 41,     /* IPv6 header.  */
+#define IPPROTO_IPV6		IPPROTO_IPV6
+    IPPROTO_RSVP = 46,	   /* Reservation Protocol.  */
+#define IPPROTO_RSVP		IPPROTO_RSVP
+    IPPROTO_GRE = 47,	   /* General Routing Encapsulation.  */
+#define IPPROTO_GRE		IPPROTO_GRE
+    IPPROTO_ESP = 50,      /* encapsulating security payload.  */
+#define IPPROTO_ESP		IPPROTO_ESP
+    IPPROTO_AH = 51,       /* authentication header.  */
+#define IPPROTO_AH		IPPROTO_AH
+    IPPROTO_MTP = 92,	   /* Multicast Transport Protocol.  */
+#define IPPROTO_MTP		IPPROTO_MTP
+    IPPROTO_BEETPH = 94,   /* IP option pseudo header for BEET.  */
+#define IPPROTO_BEETPH		IPPROTO_BEETPH
+    IPPROTO_ENCAP = 98,	   /* Encapsulation Header.  */
+#define IPPROTO_ENCAP		IPPROTO_ENCAP
+    IPPROTO_PIM = 103,	   /* Protocol Independent Multicast.  */
+#define IPPROTO_PIM		IPPROTO_PIM
+    IPPROTO_COMP = 108,	   /* Compression Header Protocol.  */
+#define IPPROTO_COMP		IPPROTO_COMP
+    IPPROTO_SCTP = 132,	   /* Stream Control Transmission Protocol.  */
+#define IPPROTO_SCTP		IPPROTO_SCTP
+    IPPROTO_UDPLITE = 136, /* UDP-Lite protocol.  */
+#define IPPROTO_UDPLITE		IPPROTO_UDPLITE
+    IPPROTO_MPLS = 137,    /* MPLS in IP.  */
+#define IPPROTO_MPLS		IPPROTO_MPLS
+    IPPROTO_RAW = 255,	   /* Raw IP packets.  */
+#define IPPROTO_RAW		IPPROTO_RAW
+    IPPROTO_MAX
+  };
 
-    IPPROTO_ND            = 77,
-#if(_WIN32_WINNT >= 0x0501)
-    IPPROTO_ICLFXBM       = 78,
-#endif//(_WIN32_WINNT >= 0x0501)
-#if(_WIN32_WINNT >= 0x0600)
-    IPPROTO_PIM           = 103,
-    IPPROTO_PGM           = 113,
-    IPPROTO_L2TP          = 115,
-    IPPROTO_SCTP          = 132,
-#endif//(_WIN32_WINNT >= 0x0600)
-    IPPROTO_RAW           = 255,
-
-    IPPROTO_MAX           = 256,
-//
-//  These are reserved for internal use by Windows.
-//
-    IPPROTO_RESERVED_RAW  = 257,
-    IPPROTO_RESERVED_IPSEC  = 258,
-    IPPROTO_RESERVED_IPSECOFFLOAD  = 259,
-    IPPROTO_RESERVED_WNV = 260,
-    IPPROTO_RESERVED_MAX  = 261
-} IPPROTO, *PIPROTO;
 
 /* POSIX.1g specifies this type name for the `sa_family' member.  */
 //typedef unsigned short int sa_family_t;
@@ -1992,19 +1990,86 @@ typedef unsigned int _dev_t;            /* device code */
 typedef unsigned short _ino_t;          /* i-node number (not used on DOS) */
 typedef long _off_t;                    /* file offset value */
 
-struct stat {
-        _dev_t     st_dev;
-        _ino_t     st_ino;
-        unsigned short st_mode;
-        short      st_nlink;
-        short      st_uid;
-        short      st_gid;
-        _dev_t     st_rdev;
-        _off_t     st_size;
-        time_t st_atime;
-        time_t st_mtime;
-        time_t st_ctime;
-        };
+// from /usr/include/x86_64-linux-gnu/bits/stat.h
+#define __x86_64__
+typedef unsigned long __dev_t;
+typedef unsigned long __ino_t;
+typedef unsigned long __nlink_t;
+typedef unsigned int __mode_t;
+typedef long __blksize_t;
+typedef long __blkcnt_t;
+typedef unsigned long __syscall_ulong_t;
+typedef long __syscall_slong_t;
+struct stat
+  {
+    __dev_t st_dev;		/* Device.  */
+#ifndef __x86_64__
+    unsigned short int __pad1;
+#endif
+#if defined __x86_64__ || !defined __USE_FILE_OFFSET64
+    __ino_t st_ino;		/* File serial number.	*/
+#else
+    __ino_t __st_ino;			/* 32bit file serial number.	*/
+#endif
+#ifndef __x86_64__
+    __mode_t st_mode;			/* File mode.  */
+    __nlink_t st_nlink;			/* Link count.  */
+#else
+    __nlink_t st_nlink;		/* Link count.  */
+    __mode_t st_mode;		/* File mode.  */
+#endif
+    __uid_t st_uid;		/* User ID of the file's owner.	*/
+    __gid_t st_gid;		/* Group ID of the file's group.*/
+#ifdef __x86_64__
+    int __pad0;
+#endif
+    __dev_t st_rdev;		/* Device number, if device.  */
+#ifndef __x86_64__
+    unsigned short int __pad2;
+#endif
+#if defined __x86_64__ || !defined __USE_FILE_OFFSET64
+    __off_t st_size;			/* Size of file, in bytes.  */
+#else
+    __off64_t st_size;			/* Size of file, in bytes.  */
+#endif
+    __blksize_t st_blksize;	/* Optimal block size for I/O.  */
+#if defined __x86_64__  || !defined __USE_FILE_OFFSET64
+    __blkcnt_t st_blocks;		/* Number 512-byte blocks allocated. */
+#else
+    __blkcnt64_t st_blocks;		/* Number 512-byte blocks allocated. */
+#endif
+#ifdef __USE_XOPEN2K8
+    /* Nanosecond resolution timestamps are stored in a format
+       equivalent to 'struct timespec'.  This is the type used
+       whenever possible but the Unix namespace rules do not allow the
+       identifier 'timespec' to appear in the <sys/stat.h> header.
+       Therefore we have to handle the use of this header in strictly
+       standard-compliant sources special.  */
+    struct timespec st_atim;		/* Time of last access.  */
+    struct timespec st_mtim;		/* Time of last modification.  */
+    struct timespec st_ctim;		/* Time of last status change.  */
+# define st_atime st_atim.tv_sec	/* Backward compatibility.  */
+# define st_mtime st_mtim.tv_sec
+# define st_ctime st_ctim.tv_sec
+#else
+    __time_t st_atime;			/* Time of last access.  */
+    __syscall_ulong_t st_atimensec;	/* Nscecs of last access.  */
+    __time_t st_mtime;			/* Time of last modification.  */
+    __syscall_ulong_t st_mtimensec;	/* Nsecs of last modification.  */
+    __time_t st_ctime;			/* Time of last status change.  */
+    __syscall_ulong_t st_ctimensec;	/* Nsecs of last status change.  */
+#endif
+#ifdef __x86_64__
+    __syscall_slong_t __glibc_reserved[3];
+#else
+# ifndef __USE_FILE_OFFSET64
+    unsigned long int __glibc_reserved4;
+    unsigned long int __glibc_reserved5;
+# else
+    __ino64_t st_ino;			/* File serial number.	*/
+# endif
+#endif
+  };
 
 #define PROV_RSA_FULL           1
 #define CRYPT_VERIFYCONTEXT     0xF0000000
